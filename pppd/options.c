@@ -121,6 +121,7 @@ char	linkname[MAXPATHLEN];	/* logical name for link */
 bool	tune_kernel;		/* may alter kernel settings */
 int	connect_delay = 1000;	/* wait this many ms after connect script */
 int	req_unit = -1;		/* requested interface unit */
+int	attach_unit = -1;	/* existing interface unit to attach to */
 char	path_net_init[MAXPATHLEN]; /* pathname of net-init script */
 char	path_net_preup[MAXPATHLEN];/* pathname of net-pre-up script */
 char	path_net_down[MAXPATHLEN]; /* pathname of net-down script */
@@ -309,6 +310,10 @@ struct option general_options[] = {
 
     { "unit", o_int, &req_unit,
       "PPP interface unit number to use if possible",
+      OPT_PRIO | OPT_LLIMIT, 0, 0 },
+
+    { "attach-unit", o_int, &attach_unit,
+      "Attach to existing PPP interface unit, created by another process",
       OPT_PRIO | OPT_LLIMIT, 0, 0 },
 
     { "ifname", o_string, req_ifname,

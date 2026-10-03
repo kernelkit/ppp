@@ -899,6 +899,18 @@ static int make_ppp_unit(void)
 		warn("Couldn't set /dev/ppp to nonblock: %m");
 
 	/*
+	 * The interface was created by another process, which owns it.
+	 * Attach to it instead, it stays when we let go of it.
+	 */
+	if (attach_unit >= 0) {
+		ifunit = attach_unit;
+		x = ioctl(ppp_dev_fd, PPPIOCATTACH, &ifunit);
+		if (x < 0)
+			error("Couldn't attach to PPP unit %d: %m", ifunit);
+		return x;
+	}
+
+	/*
 	 * Via rtnetlink it is possible to create ppp network interface with
 	 * custom ifname atomically. But it is not possible to specify custom
 	 * ppp unit id.
@@ -3704,6 +3716,11 @@ sys_check_options(void)
     if (multilink && !new_style_driver) {
 	warn("Warning: multilink is not supported by the kernel driver");
 	multilink = 0;
+    }
+    if (attach_unit >= 0 && (!new_style_driver || demand || multilink)) {
+	ppp_option_error("attach-unit cannot be used with demand, multilink, "
+			 "or this kernel driver");
+	return 0;
     }
     return 1;
 }

@@ -638,6 +638,10 @@ ppp_sys_close(void)
 int
 sys_check_options(void)
 {
+    if (attach_unit >= 0) {
+	ppp_option_error("attach-unit is not supported on this system");
+	return 0;
+    }
     return 1;
 }
 

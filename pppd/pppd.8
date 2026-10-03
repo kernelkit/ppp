@@ -1157,6 +1157,14 @@ name.  Respective values allowed for this option is: \fInone\fR, \fIsubject\fR,
 (EAP-TLS, or PEAP) Enables examination of peer certificate's purpose, and
 extended key usage attributes.
 .TP
+.B attach-unit \fInum
+Use the existing ppp interface with unit number \fInum\fR, created and owned
+by another process, instead of creating one.  The interface then outlives the
+connection and pppd, so another process can create it and set up routes,
+firewall rules, and interface settings before the link comes up.  Use with the
+\fIifname\fR option to give scripts the interface name.  Cannot be combined
+with \fIdemand\fR or \fImultilink\fR.  Only supported on Linux.
+.TP
 .B unit \fInum
 Sets the ppp unit number (for a ppp0 or ppp1 etc interface name) for outbound
 connections.  If the unit is already in use a dynamically allocated number will
